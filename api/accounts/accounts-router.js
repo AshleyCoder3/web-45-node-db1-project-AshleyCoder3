@@ -1,41 +1,50 @@
-const express = require('express');
-const { checkAccountId } = require("./accounts-middleware");
+const router = require('express').Router();
+const { checkAccountId, checkAccountNameUnique, checkAccountPayload } = require("./accounts-middleware");
 const Account = require('./accounts-model');
-const router = express.Router();
 
-router.get('/', (req, res, next) => {
-  Account.getAll(req.query)
-    .then(accounts => {
-      res.status(200).json(accounts);
-    })
-    .catch(next);
+
+router.get('/', async (req, res, next) => {
+  try {
+    const accounts = await Account.getAll();
+    res.json(accounts);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.get('/:id', checkAccountId, async (req, res, next) => {
   try {
-    res.json('get accounts by id');
+    const accounts = await Account.getById(req.params.id);
+    res.json(accounts);
   } catch (err) {
     next(err);
   }
 });
 
-router.post('/', (req, res, next) => {
-  try {
-    res.json('post accounts');
-  } catch (err) {
-    next(err);
-  }
-});
+router.post('/',
+  checkAccountPayload,
+  checkAccountNameUnique,
+  (req, res, next) => {
+    try {
+      res.json('post accounts');
+    } catch (err) {
+      next(err);
+    }
+  });
 
-router.put('/:id', (req, res, next) => {
-  try {
-    res.json('update accounts by id');
-  } catch (err) {
-    next(err);
-  }
-});
+router.put('/:id',
+  checkAccountId,
+  checkAccountPayload,
+  checkAccountNameUnique,
+  (req, res, next) => {
+    try {
+      res.json('update accounts by id');
+    } catch (err) {
+      next(err);
+    }
+  });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', checkAccountId, (req, res, next) => {
   try {
     res.json('delete accounts by id');
   } catch (err) {
