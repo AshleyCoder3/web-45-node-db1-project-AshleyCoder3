@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', checkAccountId, async (req, res, next) => {
+router.get('/:id', checkAccountId, async (req, res) => {
   res.json(req.account);
 });
 
@@ -21,7 +21,10 @@ router.post('/',
   checkAccountNameUnique,
   async (req, res, next) => {
     try {
-      const newAcc = await Account.create(req.body);
+      const newAcc = await Account.create({
+        name: req.body.name.trim(),
+        budget: req.body.budget
+      });
       res.status(201).json(newAcc);
     } catch (err) {
       next(err);
@@ -32,9 +35,10 @@ router.put('/:id',
   checkAccountId,
   checkAccountPayload,
   checkAccountNameUnique,
-  (req, res, next) => {
+  async (req, res, next) => {
+    const updated = await Account.updateById(req.params.id, req.body);
     try {
-      res.json('update accounts by id');
+      res.json(updated);
     } catch (err) {
       next(err);
     }

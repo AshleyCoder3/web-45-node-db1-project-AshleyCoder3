@@ -3,8 +3,8 @@ const Account = require('./accounts-model');
 
 exports.checkAccountPayload = (req, res, next) => {
   const { name, budget } = req.body;
-  if (!name === undefined ||
-    !budget === undefined) {
+  if (name === undefined ||
+    budget === undefined) {
     next({
       message: 'name and budget are required',
       status: 400
@@ -22,7 +22,8 @@ exports.checkAccountPayload = (req, res, next) => {
     });
   } else if (typeof budget !== 'number' || isNaN(budget)) {
     next({
-      message: 'budget of account must be a number'
+      message: 'budget of account must be a number',
+      status: 400
     });
   } else if (budget < 0 ||
     budget > 1000000) {
