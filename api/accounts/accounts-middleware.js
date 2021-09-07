@@ -34,10 +34,11 @@ exports.checkAccountPayload = (req, res, next) => {
     next();
   }
 };
-//???? VVVVV
+
 exports.checkAccountNameUnique = async (req, res, next) => {
-  const accName = await db('accounts').count('name', req.body.name.trim());
-  if (accName > 1) {
+  const accName = await db('accounts')
+    .where('name', req.body.name.trim()).first();
+  if (accName) {
     next({
       message: 'that name is taken',
       status: 400
