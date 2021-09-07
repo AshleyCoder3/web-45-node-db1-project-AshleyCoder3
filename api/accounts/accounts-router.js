@@ -13,35 +13,39 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', checkAccountId, async (req, res, next) => {
   try {
-    const data = await Account.getById(req.params.id);
-    res.json(data);
+    res.json('get accounts by id');
   } catch (err) {
     next(err);
   }
-
-  //res.json(req.account);
 });
 
 router.post('/', (req, res, next) => {
-  // DO YOUR MAGIC
+  try {
+    res.json('post accounts');
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.put('/:id', (req, res, next) => {
-  // DO YOUR MAGIC
+  try {
+    res.json('update accounts by id');
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.delete('/:id', (req, res, next) => {
-  // DO YOUR MAGIC
-});
-
-router.use((err, req, res, next) => { // eslint-disable-line
-  // DO YOUR MAGIC
+  try {
+    res.json('delete accounts by id');
+  } catch (err) {
+    next(err);
+  }
 });
 
 //***********************500 error middleware***********//
 //eslint-disable-next-line
 router.use((err, req, res, next) => {
-  console.log(err.message); // delete after
   res.status(err.status || 500).json({
     message: err.message,
     devMessage: 'Something bad inside the account router!'

@@ -15,5 +15,4 @@ server.use('*', (req, res) => {
     });
 });
 
-
 module.exports = server;
