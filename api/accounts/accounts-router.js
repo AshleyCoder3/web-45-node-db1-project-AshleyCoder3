@@ -11,15 +11,15 @@ router.get('/', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:id', checkAccountId, async (req, res) => {
-  // try {
-  //   const data = await Account.getById(req.params.id);
-  //   res.json(data);
-  // } catch (err) {
-  //   next(err);
-  // }
+router.get('/:id', checkAccountId, async (req, res, next) => {
+  try {
+    const data = await Account.getById(req.params.id);
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
 
-  res.json(req.account);
+  //res.json(req.account);
 });
 
 router.post('/', (req, res, next) => {
